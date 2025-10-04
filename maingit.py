@@ -1,10 +1,10 @@
 import os, json, time
 import sys
-import requests
 import base64
 import re
 import pyfiglet
 import colorama
+import requests
 from github import Github, Auth
 #from progress.spinner import MoonSpinner
 from colorama import init, Fore, Style
@@ -143,8 +143,8 @@ def set_miner():
     banner(setting_banner) # สมมติว่าฟังก์ชันนี้มีอยู่แล้ว
     while True:
         try:
-            namepro = input("Enter project name [ตัวอย่าง : www.github.com/ID/_?] : ")
-            droom = input("Enter room in project [ตัวอย่าง : www.github.com/ID/xxx/_?] : ")
+            namepro = input("Enter project name \n[ตัวอย่าง : www.github.com/ID/_?] : ")
+            droom = input("Enter room in project \n[ตัวอย่าง : www.github.com/ID/xxx/_?] : ")
             Rname = input("Enter Worker [ชื่อเครื่อง] : ")
             
             if not all([namepro, droom, Rname]):
