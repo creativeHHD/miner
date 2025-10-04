@@ -2,6 +2,7 @@ import os
 import json
 import time
 import sys
+import getpass
 # banner
 token_banner = """
 ╔════════════════════════════════════╦════════╗
@@ -26,7 +27,7 @@ def banner(logo):
     print("-----------------------------------------------\n")
 banner(token_banner)
 print("โปรดรอรับค่า Access Token จาก PC...")
-new_token = input("INPUT GITHUB_ACCESS_TOKEN: ") 
+new_token = getpass.getpass("INPUT GITHUB_ACCESS_TOKEN: ") 
 
 # ----------------------------------------------------
 # ***โค้ดที่เพิ่ม: แสดงค่าที่ได้รับ***
