@@ -45,6 +45,7 @@ if not new_token or new_token.strip() == "":
 
 # 3. โหลดไฟล์ miner.json ที่มีอยู่ (โค้ดเดิม)
 json_path = "set-miner/miner.json"
+data = {}
 
 try:
     if os.path.exists(json_path):
