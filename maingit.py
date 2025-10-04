@@ -6,7 +6,7 @@ import re
 import pyfiglet
 import colorama
 from github import Github, Auth
-from progress.spinner import MoonSpinner
+#from progress.spinner import MoonSpinner
 from colorama import init, Fore, Style
 init(autoreset=True)
 # banner
@@ -143,8 +143,8 @@ def set_miner():
     banner(setting_banner) # สมมติว่าฟังก์ชันนี้มีอยู่แล้ว
     while True:
         try:
-            namepro = input("Enter project name [ตัวอย่าง : www.github.com/ID/?] : ")
-            droom = input("Enter room in project [ตัวอย่าง : www.github.com/ID/xxx/?] : ")
+            namepro = input("Enter project name [ตัวอย่าง : www.github.com/ID/_?] : ")
+            droom = input("Enter room in project [ตัวอย่าง : www.github.com/ID/xxx/_?] : ")
             Rname = input("Enter Worker [ชื่อเครื่อง] : ")
             
             if not all([namepro, droom, Rname]):
@@ -163,20 +163,24 @@ def set_miner():
         except Exception as e:
             print(f"\n{Fore.YELLOW}เกิดข้อผิดพลาด: {e}")
         os.system("clear")
-        with MoonSpinner(text="                 โปรดรอ...", color="yellow") as bar:
-            for _ in range(100):
-                time.sleep(0.05)
-                bar.next()
-            time.sleep(2)
+        print(".....โปรดรอ......")
+        time.sleep(2)
+        #with MoonSpinner(text="                 โปรดรอ...", color="yellow") as bar:
+        #    for _ in range(100):
+        #        time.sleep(0.05)
+        #        bar.next()
 
 # โค้ดหลัก
 if __name__ == "__main__":
     while True:
         os.system("clear")
-        with MoonSpinner(text="                 โปรดรอ...", color="yellow") as bar:
-            for _ in range(100):
-                time.sleep(0.05)
-                bar.next()
+        print(".....โปรดรอ......")
+        time.sleep(5)
+       # with MoonSpinner(text="                 โปรดรอ...", color="yellow") as bar:
+       #     for _ in range(100):
+       #         time.sleep(0.05)
+       #         bar.next()
+       
 
         if not os.path.exists("ccminer_mmv"):
             # ควรจะมีฟังก์ชัน install() ที่ดาวน์โหลดและติดตั้ง ccminer

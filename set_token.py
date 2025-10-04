@@ -1,6 +1,8 @@
-import os, json, time
+import os
+import json
+import time
 import sys
-from progress.spinner import MoonSpinner
+
 
 # banner
 token_banner = """
