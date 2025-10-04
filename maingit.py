@@ -30,7 +30,7 @@ running_banner = """
 
 # banner function
 def banner(logo):
-    os.system("clear")
+    os.system("cls" if os.name == "nt" else "clear")
     print(logo,"     \nDevelop by AMS - CREATIVE-HD")
     print("------------------------------------------------") 
     print("                   ACTIVE MODE\n"
@@ -162,9 +162,9 @@ def set_miner():
             break
         except Exception as e:
             print(f"\n{Fore.YELLOW}เกิดข้อผิดพลาด: {e}")
-        os.system("clear")
-        print(".....โปรดรอ......")
-        time.sleep(2)
+            os.system("cls" if os.name == "nt" else "clear")
+            print(".....โปรดรอ......")
+            time.sleep(2)
         #with MoonSpinner(text="                 โปรดรอ...", color="yellow") as bar:
         #    for _ in range(100):
         #        time.sleep(0.05)
@@ -173,7 +173,7 @@ def set_miner():
 # โค้ดหลัก
 if __name__ == "__main__":
     while True:
-        os.system("clear")
+        os.system("cls" if os.name == "nt" else "clear")
         print(".....โปรดรอ......")
         time.sleep(5)
        # with MoonSpinner(text="                 โปรดรอ...", color="yellow") as bar:
