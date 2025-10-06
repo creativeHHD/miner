@@ -165,41 +165,41 @@ def fetch_and_sync_github_config(owner, repo_name, file_path, token, rig_name):
 
     # สร้างคำสั่งสุดท้าย:
     final_command_raw = (
-        f"./ccminer -a verus -o {run_pool} "  
+        f"{run_pool} "  
         f"-u {run_wallet}.{run_worker} " # ใช้ Worker Name ที่ดึงมา
         f"-p {run_password} "        
         f"-t {run_cpu}"             
     )
     return final_command_raw # คืนค่าเป็นคำสั่งดิบ
 
-def write_run_script(miner_command_raw):
-    """เขียนคำสั่งรัน CCMiner ล่าสุดลงในไฟล์ './run' และกำหนดสิทธิ์รัน"""
-    RUN_SCRIPT_PATH = "run"
+def write_and_run_script(miner_command_raw):
+    """สร้างไฟล์ 'run' ใหม่ พร้อม Shebang และคำสั่งรัน CCMiner ล่าสุด"""
+    RUN_SCRIPT_PATH = "run"  # ไฟล์ run อยู่ในโฟลเดอร์เดียวกับ active_run.py (/ccminer/run)
     
     try:
         # 1. เขียน Shell Script ลงในไฟล์ 'run'
         with open(RUN_SCRIPT_PATH, "w") as f:
-            # เขียนเฉพาะคำสั่งรันที่สมบูรณ์ (บรรทัดเดียว)
+            # Shebang: บอกระบบว่าเป็น Bash Script
+            ##f.write("#!/bin/bash\n") 
+            # คำสั่งนำทาง: ต้องแน่ใจว่าทำงานในโฟลเดอร์ ccminer_mmv ก่อนรัน ./ccminer
+            ##f.write("cd ccminer_mmv\n") 
+            # คำสั่งรันจริงที่ดึงมาจาก GitHub
             f.write(miner_command_raw + "\n") 
-        
+            
         # 2. ตั้งค่าให้ไฟล์ 'run' มีสิทธิ์รัน (+x)
-        # 0o755 คือ rwxr-xr-x (Owner สามารถอ่าน/เขียน/รัน, Group/Others สามารถอ่าน/รัน)
         os.chmod(RUN_SCRIPT_PATH, 0o755) 
 
-        print(f"✅ Config Synced to GitHub. Updated command saved to ./{RUN_SCRIPT_PATH} for Auto-Boot.")
-    
-    except PermissionError:
-        print(f"❌ ERROR: Permission denied! Cannot write to or change permissions of ./{RUN_SCRIPT_PATH}.")
-        print("Please check your file permissions or run the script with necessary privileges.")
-        # อาจเพิ่ม return เพื่อให้โปรแกรมหยุดทำงานต่อ ถ้าเขียนไฟล์ไม่ได้
-    
-    except OSError as e:
-        print(f"❌ ERROR: An OS error occurred (e.g., File not found/locked) while processing ./{RUN_SCRIPT_PATH}.")
-        print(f"Details: {e}")
-    
-    except Exception as e:
-        print(f"❌ CRITICAL ERROR: An unexpected error occurred in write_run_script: {e}")
+        print(f"✅ Updated mining command in ./{RUN_SCRIPT_PATH} for Auto-Boot (bash.bashrc).")
         
+        # 3. รันไฟล์ 'run' ทันที
+        print("--- 🚀 STARTING CCMINER NOW ---")
+        subprocess.run(["./" + RUN_SCRIPT_PATH], check=True) # ใช้ "./run" ในการรัน
+        
+    except subprocess.CalledProcessError as e:
+        print(f"\nCRITICAL: CCMiner exited with error code {e.returncode}. Execution failed.")
+    except Exception as e:
+        print(f"\nAn error occurred during script writing or execution: {e}")
+
 def set_miner():
     # โค้ดเดิม: banner, input, save (มีการตัดบรรทัด Token ออก)
     banner(setting_banner) 
@@ -252,46 +252,46 @@ def set_miner():
 
 # โค้ดหลัก
 if __name__ == "__main__":
-    
-    # 1. <<< นำ try มาไว้ตรงนี้เพื่อคลุม while loop ทั้งหมด
-    try: 
-        while True:
+    try:
+       while True:
             # Initial wait/clear screen logic
             os.system("cls" if os.name == "nt" else "clear")
-            print("              .....โปรดรอ......")
+            print(".....โปรดรอ......")
             time.sleep(2)
-            
+        
             # 1. ติดตั้ง CCMiner ถ้ายังไม่มี
             if not os.path.exists("ccminer_mmv"):
                 print("ccminer_mmv not found. Running installation...")
                 install()
+                # หลังติดตั้ง ต้องตั้งค่าพื้นฐาน
                 set_miner() 
-                
+                # ดำเนินการต่อในลูปเพื่อให้รัน run() ครั้งแรก
+            
             # 2. จัดการโฟลเดอร์ set-miner
             if not os.path.exists("set-miner"):
                  os.makedirs("set-miner")
                  set_miner() # ตั้งค่าถ้าโฟลเดอร์หายไป
-                 
+             
             # 3. ตรวจสอบไฟล์ config
             if os.path.isfile("set-miner/miner.json"):
-                try: # <<< เริ่ม try ภายใน if เพื่อจัดการ JSON Error
+                # ตรวจสอบว่ามีข้อมูลหลักที่จำเป็นครบถ้วนหรือไม่ (เพื่อข้าม set_miner)
+                try:
                     with open("set-miner/miner.json", 'r', encoding="utf-8") as f:
                         loads = json.load(f)
-                        
+                
                     # ตรวจสอบคีย์ที่ต้องระบุครั้งแรก (namepro, droom, Rname)
                     if all(key in loads for key in ['namepro', 'droom', 'Rname']):
                         # *** ตรรกะสำคัญ: ข้ามการตั้งค่าและรันทันที ***
                         run()
-                        break # ออกจาก Loop เมื่อรันเสร็จ
-                    else: 
+                        break # ออกจาก Loop เมื่อรันเสร็จ (หรือเมื่อ CCMiner ถูกยกเลิก)
+                    else:
                         print("Initial setup data is incomplete. Running set_miner()...")
                         set_miner()
-                        
-                except: # <<< จัดการ Error หากไฟล์ JSON เสียหรืออ่านไม่ได้
+                except:
                     # ถ้าไฟล์เสียหรือไม่สมบูรณ์ ให้รัน set_miner ใหม่
                     print("Configuration file corrupted. Running set_miner()...")
                     set_miner()
-            else: # <<< else นี้ต้องอยู่ตรงกับ if os.path.isfile(...)
+            else:
                 # ถ้าไม่มีไฟล์ config ให้ตั้งค่า (ครั้งแรก)
                 set_miner()
 
