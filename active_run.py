@@ -161,7 +161,7 @@ def fetch_and_sync_github_config(owner, repo_name, file_path, token, rig_name):
         json.dump(settings, set_file, indent=4)
         set_file.truncate()
         
-    print(f"✅ Config Synced from GitHub. Worker: {run_worker}, Threads: {run_cpu}")
+    print(f"✅ Config Synced from GitHub.\n⛶ Worker: {run_worker}, Threads: {run_cpu}")
 
     # สร้างคำสั่งสุดท้าย:
     final_command_raw = (
