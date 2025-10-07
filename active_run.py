@@ -51,8 +51,8 @@ def banner(logo):
 
 
 # install miner function 
-def install():
-    os.system("git clone https://github.com/creativeHHD/ccminer_mmv")
+##def install():
+    ##os.system("git clone https://github.com/creativeHHD/ccminer_mmv")
 
 # run miner function
 def run():
@@ -260,11 +260,11 @@ if __name__ == "__main__":
             time.sleep(2)
         
             # 1. ติดตั้ง CCMiner ถ้ายังไม่มี
-            if not os.path.exists("ccminer_mmv"):
-                print("ccminer_mmv not found. Running installation...")
-                install()
+            ##if not os.path.exists("ccminer_mmv"):
+                ##print("ccminer_mmv not found. Running installation...")
+                ##install()
                 # หลังติดตั้ง ต้องตั้งค่าพื้นฐาน
-                set_miner() 
+                ##set_miner() 
                 # ดำเนินการต่อในลูปเพื่อให้รัน run() ครั้งแรก
             
             # 2. จัดการโฟลเดอร์ set-miner
