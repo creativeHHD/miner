@@ -3,10 +3,11 @@ import json
 import time
 import sys
 import getpass
+from inputimeout import inputimeout, TimeoutOccurred
 # banner
 token_banner = """
 ╔════════════════════════════════════╦════════╗
-║    ████ ████ █████ █ █    ██ █████ ║   V.1  ║
+║    ████ ████ █████ █ █    ██ █████ ║  V.3.2 ║
 ║   ██  █ █      █   █ █   ██        ║CREATIVE║
 ║  ██ ███ █ GITHUB_ACCESS_TOKEN ██   ║   HD   ║
 ║ ██    █ █      █   █ █ ██          ╠════════╣
@@ -18,11 +19,11 @@ def banner(logo):
     os.system("clear")
     print(logo,"\n      Development by AMS - CREATIVE-HD")
     print("-----------------------------------------------")    
-    print("                TOKEN MODE\n"
+    print("                     TOKEN MODE\n"
         + ""
         + "           GITHUB_ACCESS_TOKEN FOR TERMUX \n"
         + "           Pool,Wallet,Name,Cpu On Github \n"
-        + "                  RUNING AUTOMATIC\n"
+        + "                  RUNNING AUTOMATIC\n"
         + "                                       AUG.2025")
     print("-----------------------------------------------\n")
 
@@ -50,20 +51,39 @@ except Exception as e:
 
 # ----------------------------------------------------
 # *** ส่วนที่แก้ไข: ตรรกะการตรวจสอบและออกจากโปรแกรม ***
-
 if existing_token and len(existing_token) >= 40: # ตรวจสอบความยาวขั้นต่ำ
     banner(token_banner)
     print(f"--- ✅ Found existing GitHub Access Token (Prefix: {existing_token[:5]}...). ---")
     print("If you want to change it, type 'y' or press any key. Otherwise, press Enter to continue.")
+    print("You have 5 seconds to respond.")
     
     # ใช้ input ธรรมดาเพื่อถามผู้ใช้ว่าจะเปลี่ยนหรือไม่
-    change_or_continue = input("Action: ").strip() 
+    #change_or_continue = input("Action: ").strip()
+    change_or_continue = None # กำหนดค่าเริ่มต้น
+    TIMEOUT_SECONDS = 5
     
-    if not change_or_continue:
-        # ผู้ใช้กด Enter เพื่อใช้ Token เดิม
+    try:
+        # ใช้ inputimeout() แทน input()
+        change_or_continue = inputimeout(prompt="Action: ", timeout=TIMEOUT_SECONDS).strip()
+    except TimeoutOccurred:
+        # หากเกิด timeout, change_or_continue จะยังคงเป็น None 
+        # ซึ่งจะทำให้โค้ดไปทำงานใน if not change_or_continue:
+        print("\n--- ⏳ Timeout! No input received. ---")
+    except Exception as e:
+        # ดักจับข้อผิดพลาดอื่น ๆ ที่อาจเกิดขึ้น
+        print(f"An error occurred: {e}")
+        
+    # ใช้ .strip() เพื่อลบช่องว่าง/ขึ้นบรรทัดใหม่
+    # ถ้าเกิด TimeoutOccurred: change_or_continue จะเป็น None ทำให้ if not change_or_continue เป็นจริง
+    # ถ้าผู้ใช้กด Enter: change_or_continue จะเป็น "" ทำให้ if not change_or_continue เป็นจริง
+    if not change_or_continue or change_or_continue.lower() == "": 
+        # ผู้ใช้กด Enter หรือเกิด Timeout เพื่อใช้ Token เดิม
         print("Using existing token. Exiting setup in 3 seconds...")
         time.sleep(3)
         sys.exit(0) # <<< ออกจากสคริปต์ทันที
+    
+        # ถ้าผู้ใช้ตอบอะไรก็ตามที่ไม่ใช่ Enter หรือ Timeout (เช่น 'y', 'n', 'test')
+        print(f"User chose to change (Input: {change_or_continue}). Continuing with new token setup...")
         
 # ----------------------------------------------------
 # *** ส่วนที่ให้กรอก Token ใหม่ (รันเฉพาะเมื่อไม่มี Token หรือต้องการเปลี่ยน) ***
