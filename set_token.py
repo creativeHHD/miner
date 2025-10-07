@@ -3,6 +3,8 @@ import json
 import time
 import sys
 import getpass
+import colorama
+from colorama import Back, Fore, Style, init
 from inputimeout import inputimeout, TimeoutOccurred
 # banner
 token_banner = """
@@ -17,15 +19,16 @@ token_banner = """
 # banner function
 def banner(logo):
     os.system("clear")
-    print(logo,"\n      Development by AMS - CREATIVE-HD")
-    print("-----------------------------------------------")    
-    print("                     TOKEN MODE\n"
+    print(logo,"")
+    print(f"{Fore.CYAN}{Style.BRIGHT}Program by AMS - CREATIVE-HD{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}-----------------------------------------------{Style.RESET_ALL}")    
+    print(f"                     TOKEN MODE\n"
         + ""
         + "           GITHUB_ACCESS_TOKEN FOR TERMUX \n"
         + "           Pool,Wallet,Name,Cpu On Github \n"
         + "                  RUNNING AUTOMATIC\n"
-        + "                                       AUG.2025")
-    print("-----------------------------------------------\n")
+        + f"                                       {Fore.CYAN}{Style.BRIGHT}AUG.2025{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}-----------------------------------------------{Style.RESET_ALL}")
 
 # --- โค้ดเริ่มต้นทำงาน ---
 
@@ -33,7 +36,6 @@ def banner(logo):
 json_path = "set-miner/miner.json"
 data = {}
 existing_token = ""
-
 try:
     if os.path.exists(json_path):
         with open(json_path, 'r', encoding='utf-8') as f:
@@ -51,10 +53,14 @@ except Exception as e:
 
 # ----------------------------------------------------
 # *** ส่วนที่แก้ไข: ตรรกะการตรวจสอบและออกจากโปรแกรม ***
+
 if existing_token and len(existing_token) >= 40: # ตรวจสอบความยาวขั้นต่ำ
     banner(token_banner)
+    print("╔═╗╦╔╦╗   ╔═╗╔═╗╔═╗╔═╗╔═╗╔═╗   ╔╦╗╔═╗╦╔═╔═╗╔╗╔")
+    print("║ ╦║ ║    ╠═╣║  ║  ║╣ ╚═╗╚═╗    ║ ║ ║╠╩╗║╣ ║║║")
+    print("╚═╝╩ ╩────╩ ╩╚═╝╚═╝╚═╝╚═╝╚═╝────╩ ╚═╝╩ ╩╚═╝╝╚╝")
     print(f"--- ✅ Found existing GitHub Access Token (Prefix: {existing_token[:5]}...). ---")
-    print("If you want to change it, type 'y' or press any key. Otherwise, press Enter to continue.")
+    print("If you want to change it, type 'y' or press any key. Otherwise\nPress Enter or wait to continue.. ")
     print("You have 5 seconds to respond.")
     
     # ใช้ input ธรรมดาเพื่อถามผู้ใช้ว่าจะเปลี่ยนหรือไม่

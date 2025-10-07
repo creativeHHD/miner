@@ -13,7 +13,7 @@ setting_banner = """
 ╔════════════════════════════════════╦════════╗
 ║    ████ ████ █████ █ █    ██ █████ ║  V 3.2 ║
 ║   ██  █ █      █   █ █   ██        ║CREATIVE║
-║  ██ ███ █   GITHUB SUPP ORT  ███   ║   HD   ║
+║  ██ ███ █   GITHUB SUPPORT   ███   ║   HD   ║
 ║ ██    █ █      █   █ █ ██          ╠════════╣
 ║██    A█C████  T█ I █V███    E█████ ║SETTING.║
 ╚════════════════════════════════════╩════════╝"""
@@ -256,7 +256,7 @@ if __name__ == "__main__":
        while True:
             # Initial wait/clear screen logic
             os.system("cls" if os.name == "nt" else "clear")
-            print(".....โปรดรอ......")
+            print("              .....โปรดรอ......")
             time.sleep(2)
         
             # 1. ติดตั้ง CCMiner ถ้ายังไม่มี
