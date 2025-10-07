@@ -161,7 +161,7 @@ def fetch_and_sync_github_config(owner, repo_name, file_path, token, rig_name):
         json.dump(settings, set_file, indent=4)
         set_file.truncate()
         
-    print(f"✅ Config Synced from GitHub.\n▶️ Worker: {run_worker}, Threads: {run_cpu}")
+    print(f"✅ Config Synced from GitHub. Worker: {run_worker}, Threads: {run_cpu}")
 
     # สร้างคำสั่งสุดท้าย:
     final_command_raw = (
@@ -261,8 +261,8 @@ if __name__ == "__main__":
         
             # 1. ติดตั้ง CCMiner ถ้ายังไม่มี
             if not os.path.exists("ccminer_mmv"):
-                #print("ccminer_mmv not found. Running installation...")
-                ##install()
+                print("ccminer_mmv not found. Running installation...")
+                install()
                 # หลังติดตั้ง ต้องตั้งค่าพื้นฐาน
                 set_miner() 
                 # ดำเนินการต่อในลูปเพื่อให้รัน run() ครั้งแรก
