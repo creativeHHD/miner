@@ -43,12 +43,10 @@ def load_worker_name():
 
 def get_ccminer_stats():
     """ดึง Hashrate และ Shares (หรือค่าจำลอง)"""
-    # *** คุณต้องเปลี่ยน Logic นี้เพื่อดึงค่าจริงจาก CCminer ***
+    # *** ลบ Logic การจำลองเครื่องดับ (if random.random() < 0.1:) ออกไป ***
     
-    if random.random() < 0.1: 
-        current_hashrate = 0.0
-    else:
-        current_hashrate = random.uniform(20000000.0, 30000000.0) 
+    # NEW LOGIC: ใช้ค่า Hashrate ปกติเสมอ (ระหว่างการทดสอบ)
+    current_hashrate = random.uniform(20000000.0, 30000000.0) 
         
     current_shares = 100.0 + random.randint(1, 50) 
     
