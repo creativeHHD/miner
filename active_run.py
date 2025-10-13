@@ -208,9 +208,9 @@ def set_miner():
     banner(setting_banner) 
     while True:
         try:
-            namepro = input("Enter project name \n[ตัวอย่าง : https://github.com/ID/.1.?] : ").strip()
-            droom = input("Enter config file name \n[ตัวอย่าง : https://github.com/ID/.1./2?] : ").strip()
-            Rname = input("Enter Worker [ชื่อเครื่อง] : ").strip()
+            namepro = input("Enter project name \n[ตัวอย่าง : https://github.com/ID/.1.?]\n : ").strip()
+            droom = input("\nEnter config file name \n[ตัวอย่าง : https://github.com/ID/.1./2?]\n : ").strip()
+            Rname = input("\nEnter Worker [ชื่อเครื่อง]\n : ").strip()
             
             # *** บรรทัดที่ถูกตัดออก: ***
             # github_token = input("Enter GitHub Personal Access Token (or press Enter if known): ").strip()
@@ -303,3 +303,4 @@ if __name__ == "__main__":
         # ดักจับสัญญาณ Ctrl + C เพื่อให้จบโปรแกรมอย่างสวยงาม
         print("\n\n--- 🛑 Program terminated by user (Ctrl+C). ---")
         sys.exit(0)
+
